@@ -8,4 +8,5 @@ public interface RoleService {
     public Role findByAuthority(String authority);
     public void save(Role role);
     public List<Role> findAll();
+
 }

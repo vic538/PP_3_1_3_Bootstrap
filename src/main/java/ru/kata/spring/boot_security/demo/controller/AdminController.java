@@ -4,14 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.dao.UserRepository;
-import ru.kata.spring.boot_security.demo.entity.Role;
 import ru.kata.spring.boot_security.demo.entity.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -19,15 +16,13 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final UserRepository userRepository;
     private UserService userService;
     private RoleService roleService;
 
     @Autowired
-    public AdminController(UserService userService, RoleService roleService, UserRepository userRepository) {
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
-        this.userRepository = userRepository;
     }
 
     @GetMapping()
@@ -43,28 +38,9 @@ public class AdminController {
     }
 
     @PostMapping("/saveUser")
-    public String saveUser(@RequestParam(value = "role", required = false) String[] rolesStr, @ModelAttribute User user) {
+    public String saveUser(@RequestParam(value = "role", required = false) List<String> rolesStr, @ModelAttribute User user) {
 
-        if (userRepository.getById(user.getId()) == null) {
-            List<Role> roles = new ArrayList<>();
-            if (rolesStr != null) {
-                for (String roleName : rolesStr) {
-                    Role role = roleService.findByAuthority(roleName);
-                    if (role == null) {
-                        role = new Role(roleName);
-                        roleService.save(role);
-                    }
-                    roles.add(role);
-                }
-            }
-            user.setRoles(roles);
-            user.setEnabled(true);
-            userService.saveUser(user);
-        } else {
-            user.setPassword(userService.getUser(user.getId()).getPassword());
-            user.setRoles(userService.getUser(user.getId()).getRoles());
-        }
-
+        userService.saveUserWithRole(user, rolesStr);
         return "redirect:/admin";
     }
 
