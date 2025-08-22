@@ -15,29 +15,6 @@ import java.util.stream.Collectors;
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
-//    private final UserRepository userRepository;
-//
-//    public MyUserDetailsService(UserRepository userRepository) {
-//        this.userRepository = userRepository;
-//    }
-//
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        User user = userRepository.findByUsername(username);
-//        if (user == null) {
-//            throw new UsernameNotFoundException("User not found: " + username);
-//        }
-//
-//        // Преобразуем вашего User в Spring Security UserDetails
-//        return org.springframework.security.core.userdetails.User.builder()
-//                .username(user.getUsername())
-//                .password(user.getPassword())
-//                .authorities(user.getRoles().stream()
-//                        .map(role -> new SimpleGrantedAuthority(role.getAuthority()))
-//                        .collect(Collectors.toList()))
-//                .build();
-//    }
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
