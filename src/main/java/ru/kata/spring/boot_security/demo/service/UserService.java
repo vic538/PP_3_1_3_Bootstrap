@@ -6,8 +6,9 @@ import ru.kata.spring.boot_security.demo.entity.User;
 import java.util.List;
 
 public interface UserService {
-    public User getUserByUsername(String username);
+    public User findUserByName(String name);
     public List<User> getAllUsers();
+    public String findEmailByName(String name);
     public void saveUser(User user);
     public User getUser(int id);
     public void deleteUser(int id);

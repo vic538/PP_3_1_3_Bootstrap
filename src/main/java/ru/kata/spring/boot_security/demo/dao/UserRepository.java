@@ -8,8 +8,15 @@ import java.util.List;
 
 
 public interface UserRepository extends JpaRepository<User, Integer> {
-    @Query("Select u from User u left join fetch u.roles where u.username=:username")
-    User findByUsername(String username);
+    @Query("Select u from User u left join fetch u.roles where u.email=:email")
+    User findUserByEmail(String email);
+    String findEmailByName(String name);
+    User findUserByName(String name);
+    User findUserById(int id);
+
+
+
+
 
 
 

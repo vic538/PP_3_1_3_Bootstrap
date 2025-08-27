@@ -26,42 +26,56 @@ public class AdminController {
     }
 
     @GetMapping()
-    public String showAllUsers(Model model) {
+    public String showAllUsers(Principal principal, Model model) {
         model.addAttribute("users", userService.getAllUsers());
-        return "all-users";
+
+        User currentUser = userService.findUserByName(principal.getName());
+
+        model.addAttribute("userEmail", currentUser.getEmail());
+        model.addAttribute("userRoles", currentUser.getRoles());
+        return "admin-page";
     }
 
     @GetMapping(value = "/addNewUser")
-    public String addUser(Model model) {
+    public String addUser(Principal principal, Model model) {
         model.addAttribute("user", new User());
-        return "user-info";
+
+        User currentUser = userService.findUserByName(principal.getName());
+
+        model.addAttribute("userEmail", currentUser.getEmail());
+        model.addAttribute("userRoles", currentUser.getRoles());
+        return "add-new-user";
     }
 
     @PostMapping("/saveUser")
     public String saveUser(@RequestParam(value = "role", required = false) List<String> rolesStr, @ModelAttribute User user) {
-
         userService.saveUserWithRole(user, rolesStr);
         return "redirect:/admin";
     }
 
-    @PostMapping(value = "/updateUser")
-    public String updateUser(@RequestParam int id, Model model) {
-        model.addAttribute("user", userService.getUser(id));
-        return "user-info";
+    @PostMapping(value = "/edit/{id}")
+    public String updateUser(@PathVariable("id") int id,
+                             @RequestParam(value = "role", required = false) List<String> rolesStr,
+                             @ModelAttribute User user) {
+        user.setId(id);
+        userService.saveUserWithRole(user, rolesStr);
+        return "redirect:/admin";
     }
 
-    @PostMapping(value = "/deleteUser")
-    public String deleteUser(@RequestParam int id) {
+    @PostMapping(value = "/delete/{id}")
+    public String deleteUser(@PathVariable("id") int id) {
         userService.deleteUser(id);
         return "redirect:/admin";
     }
 
     @GetMapping(value = "/user")
     public String showUser(Principal principal, Model model) {
-        String username = principal.getName();
-        User user = userService.getUserByUsername(username);
-        model.addAttribute("user", user);
-        return "user";
+        model.addAttribute("user", userService.findUserByName(principal.getName()));
+        User currentUser = userService.findUserByName(principal.getName());
+
+        model.addAttribute("userEmail", currentUser.getEmail());
+        model.addAttribute("userRoles", currentUser.getRoles());
+        return "user-page";
     }
 
 }

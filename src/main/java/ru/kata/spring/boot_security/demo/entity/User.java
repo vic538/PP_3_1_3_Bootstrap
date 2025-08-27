@@ -18,10 +18,13 @@ public class User implements UserDetails {
     private int id;
 
     @Column(name = "username")
-    private String username;
+    private String name;
 
     @Column(name = "surname")
     private String surname;
+
+    @Column(name = "age")
+    private int age;
 
     @Column(name = "department")
     private String department;
@@ -31,6 +34,10 @@ public class User implements UserDetails {
 
     @Column(name = "enabled")
     private boolean enabled = true;
+
+    @Column(name = "email", unique = true, nullable = false)
+    private String email;
+
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -44,16 +51,37 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String username, String surname, String department, String password, boolean enabled) {
-        this.username = username;
+    public User(String name, String surname, String department, String password, boolean enabled, String email, int age) {
+        this.name = name;
         this.surname = surname;
-        this.department = department;
         this.password = password;
         this.enabled = enabled;
+        this.email = email;
+        this.age = age;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setName(String username) {
+        this.name = username;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setPassword(String password) {
@@ -108,7 +136,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override
