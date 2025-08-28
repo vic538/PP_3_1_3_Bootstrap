@@ -390,10 +390,7 @@
                         <input type="email" class="form-control" id="editEmail" name="email" required>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="editUsername" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="editUsername" name="username" required>
-                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -481,14 +478,14 @@
                 const userSurname = this.getAttribute('data-surname');
                 const userAge = this.getAttribute('data-age');
                 const userEmail = this.getAttribute('data-email');
-                const userUsername = this.getAttribute('data-username');
+
 
                 document.getElementById('editUserId').value = userId;
                 document.getElementById('editName').value = userName;
                 document.getElementById('editSurname').value = userSurname;
                 document.getElementById('editAge').value = userAge;
                 document.getElementById('editEmail').value = userEmail;
-                document.getElementById('editUsername').value = userUsername;
+
 
                 editUserForm.action = `/admin/edit/${userId}`;
             });
