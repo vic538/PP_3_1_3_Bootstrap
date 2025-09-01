@@ -154,6 +154,13 @@
             background: #dc3545;
             border: none;
         }
+        select.form-select[multiple] {
+            min-height: 70px;
+        }
+        select.form-select[multiple][readonly] {
+            background-color: #e9ecef;
+            pointer-events: none;
+        }
         @media (max-width: 900px) {
             .main-section {
                 flex-direction: column;
@@ -236,7 +243,7 @@
                                     th:data-surname="${user.surname}"
                                     th:data-age="${user.age}"
                                     th:data-email="${user.email}"
-                                    th:data-role="${user.roles[0].authority}">
+                                    th:data-roles="${#strings.listJoin(user.roles.![authority], ',')}">
                                 Edit
                             </button>
                         </td>
@@ -249,7 +256,7 @@
                                     th:data-surname="${user.surname}"
                                     th:data-age="${user.age}"
                                     th:data-email="${user.email}"
-                                    th:data-role="${user.roles[0].authority}">
+                                    th:data-roles="${#strings.listJoin(user.roles.![authority], ',')}">
                                 Delete
                             </button>
                         </td>
@@ -293,8 +300,8 @@
                         <input type="password" class="form-control" id="editPassword" name="password">
                     </div>
                     <div class="mb-3">
-                        <label for="editRole" class="form-label">Role</label>
-                        <select class="form-select" id="editRole" name="role" required>
+                        <label for="editRoles" class="form-label">Roles</label>
+                        <select class="form-select" id="editRoles" name="role" multiple size="2">
                             <option value="ROLE_ADMIN">ADMIN</option>
                             <option value="ROLE_USER">USER</option>
                         </select>
@@ -330,8 +337,13 @@
                     <input type="number" class="form-control" id="deleteAge" readonly>
                     <label for="deleteEmail" class="form-label mt-3">Email</label>
                     <input type="email" class="form-control" id="deleteEmail" readonly>
-                    <label for="deleteRole" class="form-label mt-3">Role</label>
-                    <input type="text" class="form-control" id="deleteRole" readonly>
+                    <div class="mb-3">
+                        <label for="deleteRoles" class="form-label">Roles</label>
+                        <select class="form-select" id="deleteRoles" multiple size="2" readonly>
+                            <option value="ROLE_ADMIN">ADMIN</option>
+                            <option value="ROLE_USER">USER</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -356,12 +368,26 @@
             document.getElementById('editEmail').value = button.getAttribute('data-email');
             document.getElementById('editPassword').value = '';
 
-            const roleValue = button.getAttribute('data-role');
-            const editRoleSelect = document.getElementById('editRole');
-            if (editRoleSelect) {
-                for(let i = 0; i < editRoleSelect.options.length; i++) {
-                    editRoleSelect.options[i].selected = editRoleSelect.options[i].value === roleValue;
+            // Обработка множественных ролей
+            const rolesValue = button.getAttribute('data-roles');
+            const rolesArray = rolesValue ? rolesValue.split(',') : [];
+
+            // Сброс всех опций
+            const rolesSelect = document.getElementById('editRoles');
+            if (rolesSelect) {
+                for (let i = 0; i < rolesSelect.options.length; i++) {
+                    rolesSelect.options[i].selected = false;
                 }
+
+                // Установка выбранных ролей
+                rolesArray.forEach(role => {
+                    for (let i = 0; i < rolesSelect.options.length; i++) {
+                        if (rolesSelect.options[i].value === role) {
+                            rolesSelect.options[i].selected = true;
+                            break;
+                        }
+                    }
+                });
             }
 
             const form = document.getElementById('editForm');
@@ -382,8 +408,27 @@
             document.getElementById('deleteLastName').value = button.getAttribute('data-surname');
             document.getElementById('deleteAge').value = button.getAttribute('data-age');
             document.getElementById('deleteEmail').value = button.getAttribute('data-email');
-            const roleText = button.getAttribute('data-role').replace('ROLE_', '');
-            document.getElementById('deleteRole').value = roleText;
+
+            // Обработка множественных ролей для отображения
+            const rolesValue = button.getAttribute('data-roles');
+            const rolesArray = rolesValue ? rolesValue.split(',') : [];
+
+            // Установка выбранных ролей в read-only select
+            const deleteRolesSelect = document.getElementById('deleteRoles');
+            if (deleteRolesSelect) {
+                for (let i = 0; i < deleteRolesSelect.options.length; i++) {
+                    deleteRolesSelect.options[i].selected = false;
+                }
+
+                rolesArray.forEach(role => {
+                    for (let i = 0; i < deleteRolesSelect.options.length; i++) {
+                        if (deleteRolesSelect.options[i].value === role) {
+                            deleteRolesSelect.options[i].selected = true;
+                            break;
+                        }
+                    }
+                });
+            }
 
             const form = document.getElementById('deleteForm');
             if (form) {
