@@ -1,6 +1,8 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,16 +18,15 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private UserService userService;
-    private RoleService roleService;
+    private final UserService userService;
+    private final RoleService roleService;
 
-    @Autowired
     public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
 
-    @GetMapping()
+    @GetMapping
     public String showAllUsers(Principal principal, Model model) {
         model.addAttribute("users", userService.getAllUsers());
 
@@ -57,8 +58,7 @@ public class AdminController {
     public String updateUser(@PathVariable("id") int id,
                              @RequestParam(value = "role", required = false) List<String> rolesStr,
                              @ModelAttribute User user) {
-        user.setId(id);
-        userService.saveUserWithRole(user, rolesStr);
+        userService.updateUserWithRoles(id, user, rolesStr);
         return "redirect:/admin";
     }
 
@@ -69,10 +69,10 @@ public class AdminController {
     }
 
     @GetMapping(value = "/user")
-    public String showUser(Principal principal, Model model) {
-        model.addAttribute("user", userService.findUserByName(principal.getName()));
-        User currentUser = userService.findUserByName(principal.getName());
+    public String showUser(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        User currentUser = userService.findUserByName(userDetails.getUsername());
 
+        model.addAttribute("user", currentUser);
         model.addAttribute("userEmail", currentUser.getEmail());
         model.addAttribute("userRoles", currentUser.getRoles());
         return "user-page";

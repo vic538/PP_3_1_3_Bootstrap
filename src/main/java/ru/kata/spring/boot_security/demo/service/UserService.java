@@ -13,5 +13,6 @@ public interface UserService {
     public User getUser(int id);
     public void deleteUser(int id);
     public void saveUserWithRole(User user, List<String> roles);
+    public void updateUserWithRoles(int id, User user, List<String> rolesStr);
 
 }

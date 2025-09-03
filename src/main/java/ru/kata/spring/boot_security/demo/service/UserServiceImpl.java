@@ -103,4 +103,15 @@ public class UserServiceImpl implements UserService {
         }
         return roles;
     }
+
+    @Override
+    public void updateUserWithRoles(int id, User user, List<String> rolesStr) {
+        User existingUser = userRepository.findById(id).orElse(null);
+        existingUser.setName(user.getName());
+        existingUser.setEnabled(user.isEnabled());
+        existingUser.setPassword(user.getPassword());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setRoles(processRoles(rolesStr));
+        userRepository.save(existingUser);
+    }
 }
