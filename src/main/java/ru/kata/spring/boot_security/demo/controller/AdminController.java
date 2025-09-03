@@ -27,22 +27,20 @@ public class AdminController {
     }
 
     @GetMapping
-    public String showAllUsers(Principal principal, Model model) {
-        model.addAttribute("users", userService.getAllUsers());
+    public String showAllUsers(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        User currentUser = userService.findUserByName(userDetails.getUsername());
 
-        User currentUser = userService.findUserByName(principal.getName());
-
+        model.addAttribute("user", currentUser);
         model.addAttribute("userEmail", currentUser.getEmail());
         model.addAttribute("userRoles", currentUser.getRoles());
         return "admin-page";
     }
 
     @GetMapping(value = "/addNewUser")
-    public String addUser(Principal principal, Model model) {
-        model.addAttribute("user", new User());
+    public String addUser(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        User currentUser = userService.findUserByName(userDetails.getUsername());
 
-        User currentUser = userService.findUserByName(principal.getName());
-
+        model.addAttribute("user", currentUser);
         model.addAttribute("userEmail", currentUser.getEmail());
         model.addAttribute("userRoles", currentUser.getRoles());
         return "add-new-user";
