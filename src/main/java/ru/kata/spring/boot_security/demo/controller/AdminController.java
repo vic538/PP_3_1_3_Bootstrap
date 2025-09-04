@@ -28,21 +28,14 @@ public class AdminController {
 
     @GetMapping
     public String showAllUsers(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        User currentUser = userService.findUserByName(userDetails.getUsername());
-
-        model.addAttribute("user", currentUser);
-        model.addAttribute("userEmail", currentUser.getEmail());
-        model.addAttribute("userRoles", currentUser.getRoles());
+        model.addAttribute("user", userService.findUserByName(userDetails.getUsername()));
+        model.addAttribute("users", userService.getAllUsers());
         return "admin-page";
     }
 
     @GetMapping(value = "/addNewUser")
     public String addUser(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        User currentUser = userService.findUserByName(userDetails.getUsername());
-
-        model.addAttribute("user", currentUser);
-        model.addAttribute("userEmail", currentUser.getEmail());
-        model.addAttribute("userRoles", currentUser.getRoles());
+        model.addAttribute("user", new User());
         return "add-new-user";
     }
 
@@ -68,11 +61,7 @@ public class AdminController {
 
     @GetMapping(value = "/user")
     public String showUser(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        User currentUser = userService.findUserByName(userDetails.getUsername());
-
-        model.addAttribute("user", currentUser);
-        model.addAttribute("userEmail", currentUser.getEmail());
-        model.addAttribute("userRoles", currentUser.getRoles());
+        model.addAttribute("user", userService.findUserByName(userDetails.getUsername()));
         return "user-page";
     }
 

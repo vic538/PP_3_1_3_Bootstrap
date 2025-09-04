@@ -26,11 +26,7 @@ public class UserController {
 
     @GetMapping
     public String showUser(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        User currentUser = userService.findUserByName(userDetails.getUsername());
-
-        model.addAttribute("user", currentUser);
-        model.addAttribute("userEmail", currentUser.getEmail());
-        model.addAttribute("userRoles", currentUser.getRoles());
+        model.addAttribute("user", userService.findUserByName(userDetails.getUsername()));
         return "user-page";
     }
 }
