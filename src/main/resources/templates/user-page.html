@@ -150,8 +150,8 @@
 
 <div class="header-bar">
     <span>
-        <span th:text="${userEmail}">user@mail.ru</span> with roles:
-        <span th:each="role, stat : ${userRoles}"
+        <span th:text="${user.email}">user@mail.ru</span> with roles:
+        <span th:each="role, stat : ${user.roles}"
               th:text="${#strings.replace(role.authority, 'ROLE_', '') + (stat.last ? '' : ', ')}">USER</span>
     </span>
     <a th:href="@{/logout}" class="logout-link">Logout</a>

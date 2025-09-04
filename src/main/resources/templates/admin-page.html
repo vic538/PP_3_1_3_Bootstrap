@@ -183,9 +183,9 @@
 
 <div class="header-bar">
     <span>
-      <span th:text="${userEmail}">admin@mail.ru</span>
+      <span th:text="${user.email}">admin@mail.ru</span>
       with roles:
-      <span th:each="role,stat : ${userRoles}" th:text="${#strings.replace(role.authority,'ROLE_','')} + (${!stat.last ? ', ' : ''})">ADMIN USER</span>
+      <span th:each="role,stat : ${user.roles}" th:text="${#strings.replace(role.authority,'ROLE_','')} + (${!stat.last ? ', ' : ''})">ADMIN USER</span>
     </span>
     <a th:href="@{/logout}" class="logout-link">Logout</a>
 </div>
@@ -361,6 +361,7 @@
     if (editUserModal) {
         editUserModal.addEventListener('show.bs.modal', event => {
             const button = event.relatedTarget;
+
             document.getElementById('editUserId').value = button.getAttribute('data-id');
             document.getElementById('editFirstName').value = button.getAttribute('data-name');
             document.getElementById('editLastName').value = button.getAttribute('data-surname');
@@ -397,11 +398,11 @@
         });
     }
 
-
     const deleteUserModal = document.getElementById('deleteUserModal');
     if (deleteUserModal) {
         deleteUserModal.addEventListener('show.bs.modal', event => {
             const button = event.relatedTarget;
+
             document.getElementById('deleteUserId').value = button.getAttribute('data-id');
             document.getElementById('deleteUserIdShow').value = button.getAttribute('data-id');
             document.getElementById('deleteFirstName').value = button.getAttribute('data-name');

@@ -151,10 +151,7 @@
 <body>
 
 <div class="header-bar">
-    <span>
-        <span th:text="${userEmail}">admin@mail.ru</span>
-        with roles: <span th:each="role, stat : ${userRoles}" th:text="${#strings.replace(role.authority, 'ROLE_', '')} + (${!stat.last ? ', ' : ''})">ADMIN USER</span>
-    </span>
+    <span>Admin Panel</span>
     <a th:href="@{/logout}" class="logout-link">Logout</a>
 </div>
 
@@ -183,27 +180,27 @@
                 <div class="centered-form-controls">
                     <div class="form-group">
                         <label for="nameInput" class="form-label">First name</label>
-                        <input id="nameInput" type="text" class="form-control bg-yellow" th:field="*{name}" placeholder="First name"/>
+                        <input id="nameInput" type="text" class="form-control bg-yellow" th:field="*{name}" placeholder="First name" required/>
                     </div>
                     <div class="form-group">
                         <label for="surnameInput" class="form-label">Last name</label>
-                        <input id="surnameInput" type="text" class="form-control bg-yellow" th:field="*{surname}" placeholder="Last name"/>
+                        <input id="surnameInput" type="text" class="form-control bg-yellow" th:field="*{surname}" placeholder="Last name" required/>
                     </div>
                     <div class="form-group">
                         <label for="ageInput" class="form-label">Age</label>
-                        <input id="ageInput" type="number" class="form-control" th:field="*{age}" placeholder="Age"/>
+                        <input id="ageInput" type="number" class="form-control" th:field="*{age}" placeholder="Age" required min="1" max="120"/>
                     </div>
                     <div class="form-group">
                         <label for="emailInput" class="form-label">Email</label>
-                        <input id="emailInput" type="email" class="form-control bg-yellow" th:field="*{email}" placeholder="Email"/>
+                        <input id="emailInput" type="email" class="form-control bg-yellow" th:field="*{email}" placeholder="Email" required/>
                     </div>
                     <div class="form-group">
                         <label for="passwordInput" class="form-label">Password</label>
-                        <input id="passwordInput" type="password" class="form-control" th:field="*{password}" placeholder="Password"/>
+                        <input id="passwordInput" type="password" class="form-control" th:field="*{password}" placeholder="Password" required/>
                     </div>
                     <div class="form-group">
                         <label for="roleSelect" class="form-label">Roles</label>
-                        <select id="roleSelect" class="form-control" name="role" multiple>
+                        <select id="roleSelect" class="form-control" name="role" multiple required>
                             <option value="ROLE_ADMIN">ADMIN</option>
                             <option value="ROLE_USER">USER</option>
                         </select>
